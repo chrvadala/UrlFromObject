@@ -79,7 +79,7 @@ class UrlProvider
         $generator = $classConfig[$page];
 
         if(is_callable($generator)) {
-            $urlConfig = $generator($page, $object, $options);
+            $urlConfig = $generator($object, $options);
         }
 
         if(is_array($generator)){
