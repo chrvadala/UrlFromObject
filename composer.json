@@ -15,7 +15,10 @@
 	"autoload" : {
 		"psr-0" : {
 			"UrlFromObject" : "src/"
-		}
+		},
+		 "classmap" : [
+			"./Module.php"
+        ]
 	},
 	"minimum-stability" : "RC"
 }
