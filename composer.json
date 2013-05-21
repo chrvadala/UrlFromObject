@@ -16,6 +16,5 @@
 		"psr-0" : {
 			"UrlFromObject" : "src/"
 		}
-	},
-	"minimum-stability" : "RC"
+	}
 }
