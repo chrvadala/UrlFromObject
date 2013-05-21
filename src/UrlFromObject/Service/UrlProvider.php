@@ -12,6 +12,8 @@ class UrlProvider
      */
     protected $config;
 
+    protected $loadedGenerators = array();
+
     /**
      *
      * @param array $config
@@ -34,21 +36,62 @@ class UrlProvider
      *
      * @param string $classname
      */
-    public function getConfig($classname = null)
+    public function getConfig()
     {
-        if(is_null($classname)){
-            return $this->config;
-        }
-
-        if(! isset($this->config[$classname])){
-            throw new Exception\NotFoundException(sprintf(
-                'La class %s non è stata configurata',
-                $classname
-            ));
-        }
-
-        return $this->config[$classname];
+        return $this->config;
     }
+
+    /**
+     *
+     * @param string $classname
+     * @param string $page
+     * @throws Exception\NotFoundException
+     * @throws Exception\MalformedGeneratorException
+     * @return array('class'=> '...', 'method'=> '...')
+     */
+    public function getGeneratorConfig($classname, $page)
+    {
+        if(! isset($this->config[$classname])){
+        	throw new Exception\NotFoundException(sprintf(
+    			'La classe %s non è stata configurata',
+    			$classname
+        	));
+        }
+
+        //supporto agli alias dell'intera classe
+        if(is_string($this->config[$classname])){
+        	return $this->getUrlGeneratorConfig($this->config[$classname], $page);
+        }
+
+        if(! isset($this->config[$classname][$page])){
+        	throw new Exception\NotFoundException(sprintf(
+    			'La pagina %s della classe %s non è stata configurata',
+    			$page,
+    			$classname
+        	));
+        }
+
+        if(     !isset($this->config[$classname][$page]['class'])
+            ||  !isset($this->config[$classname][$page]['method'])){
+        	throw new Exception\MalformedGeneratorException(sprintf(
+        			'La configurazione della pagina %s della classe %s non contiene le chiavi class e method.',
+        			$page,
+        			$classname
+        	));
+        }
+
+        return $this->config[$classname][$page];
+    }
+
+    public function getGenerator($generatorClassname)
+    {
+        if(!isset($this->loadedGenerators[$generatorClassname])){
+        	$this->loadedGenerators[$generatorClassname] = new $generatorClassname();
+        }
+
+        return $this->loadedGenerators[$generatorClassname];
+    }
+
 
     /**
      *
@@ -59,32 +102,20 @@ class UrlProvider
      */
     public function generateUrlConfig($page, $object, array $options = array())
     {
-
         $classname = get_class($object);
 
-        $classConfig = $this->getConfig($classname);
+        $generatorConfig = $this->getGeneratorConfig($classname, $page);
+        $generator = $this->getGenerator($generatorConfig['class']);
 
-        if(is_string($classConfig)){
-            $classConfig = $this->getConfig($classConfig);
+        if(! method_exists($generator, $generatorConfig['method'])){
+            throw new Exception\MalformedGeneratorException(sprintf(
+            		'All\'interno della classe %s non esiste il metodo %s.',
+            		$classname,
+                    $generatorConfig['method']
+            ));
         }
 
-        if(! isset($classConfig[$page])){
-        	throw new Exception\NotFoundException(sprintf(
-    			'La pagina %s della classe %s non è stata configurata',
-    	        $page,
-    			$classname
-        	));
-        }
-
-        $generator = $classConfig[$page];
-
-        if(is_callable($generator)) {
-            $urlConfig = $generator($object, $options);
-        }
-
-        if(is_array($generator)){
-            $urlConfig = $generator;
-        }
+        $urlConfig = $generator->{$generatorConfig['method']}($object, $options);
 
         if(! is_array($urlConfig)){
         	throw new Exception\MalformedGeneratorException(sprintf(
