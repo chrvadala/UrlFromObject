@@ -8,7 +8,7 @@ class UrlProviderFactory implements FactoryInterface
 
 	public function createService(ServiceLocatorInterface $serviceLocator) {
 	    $config = $serviceLocator->get('Config');
-	    $urlProvider = new UrlProvider($config['url-from-object']);
+	    $urlProvider = new UrlProvider($config['work-out-web']['url-from-object']);
 	    return $urlProvider;
 	}
 

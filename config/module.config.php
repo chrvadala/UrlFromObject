@@ -1,7 +1,11 @@
 <?php
 
 return array(
-	'url-from-object' => array(),
+	'work-out-web' => array(
+        'url-from-object' => array(
+
+    	),
+	),
 
     'service_manager' => array(
         'factories' => array(
