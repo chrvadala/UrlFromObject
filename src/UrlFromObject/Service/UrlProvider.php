@@ -60,7 +60,7 @@ class UrlProvider
 
         //supporto agli alias dell'intera classe
         if(is_string($this->config[$classname])){
-        	return $this->getUrlGeneratorConfig($this->config[$classname], $page);
+        	return $this->getGeneratorConfig($this->config[$classname], $page);
         }
 
         if(! isset($this->config[$classname][$page])){
