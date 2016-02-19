@@ -1,20 +1,20 @@
 {
-	"name" : "work-out-web/url-from-object",
-	"description" : "Una semplice libreria per gestire con semplicità i collegamenti tra oggetti e rotte",
-	"license": "MIT",
-	"type" : "library",
-	"authors" : [{
-			"name" : "Work out Web"
-		}
-	],
-	"keywords" : [],
-	"homepage" : "http://www.workoutweb.it",
-	"require" : {
-		"zendframework/zendframework" : "2.*"
-	},
-	"autoload" : {
-		"psr-0" : {
-			"UrlFromObject" : "src/"
-		}
-	}
+  "name": "chrvadala/url-from-object",
+  "description": "Una libreria per gestire collegamenti tra oggetti e rotte",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "chrvadala"
+    }
+  ],
+  "keywords": [],
+  "require": {
+    "zendframework/zendframework": "2.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "UrlFromObject": "src/"
+    }
+  }
 }

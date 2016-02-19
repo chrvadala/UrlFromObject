@@ -1,7 +1,7 @@
 UrlFromObject Helper and Plugin for ZF2
 =============
 
-Semplice classe per generare gli url a partire da un oggetto.
+Semplice classe per generare url a partire da un oggetto.
 
 
 in view: 
