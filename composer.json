@@ -10,7 +10,7 @@
   ],
   "keywords": [],
   "require": {
-    "zendframework/zendframework": "2.*"
+
   },
   "autoload": {
     "psr-0": {
